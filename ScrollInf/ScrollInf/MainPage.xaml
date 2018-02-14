@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ScrollInf"
+             xmlns:extended="clr-namespace:Xamarin.Forms.Extended;assembly=Xamarin.Forms.Extended.InfiniteScrolling"
+             x:Class="ScrollInf.MainPage">
+    
+    <ContentPage.BindingContext>
+        <local:MainViewModel/>
+    </ContentPage.BindingContext>
+
+    <StackLayout>
+
+        <Label 
+            FontSize="30"
+            HorizontalOptions="Center"
+            Margin="20,0" 
+            Text="Scroll Infinito" 
+            TextColor="DeepPink"/>
+        <Label 
+            FontSize="25"
+            HorizontalOptions="Center"
+            Margin="20,0"
+            Text="Xamarin.Forms"
+            TextColor="DodgerBlue"/>
+
+        <ListView
+            CachingStrategy="RecycleElement"
+            ItemsSource="{Binding Items}"
+            HasUnevenRows="True">
+
+            <ListView.Behaviors>
+                <extended:InfiniteScrollBehavior
+                    IsLoadingMore="{Binding IsBusy}"/>
+            </ListView.Behaviors>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid 
+                            Padding="12">
+                            <Label 
+                                FontSize="30" 
+                                Text="{Binding .}" 
+                                TextColor="Black" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+            <ListView.Footer>
+                <Grid 
+                    IsVisible="{Binding IsBusy}"
+                    Padding="6">
+                    <!-- set the footer to have a zero height when invisible -->
+                    <Grid.Triggers>
+                        <Trigger
+                            Property="IsVisible"
+                            TargetType="Grid"
+                            Value="False">
+                            <Setter 
+                                Property="HeightRequest" 
+                                Value="0"/>
+                        </Trigger>
+                    </Grid.Triggers>
+                    <!-- the loading content -->
+                    <Label 
+                        FontSize="20" 
+                        FontAttributes="Bold"
+                        HorizontalOptions="Center"
+                        Text="Loading..."
+                        TextColor="DeepPink"
+                        VerticalOptions="Center"/>
+                </Grid>
+            </ListView.Footer>
+
+        </ListView>
+        
+    </StackLayout>
+</ContentPage>
